@@ -1,4 +1,6 @@
 import pandas as pd
+from pathlib import Path 
+
 df_carb = pd.read_csv("../Prix_carburants_France_instantane.csv", delimiter=';', on_bad_lines='skip')
 # print(df_carb.head)
 
@@ -17,3 +19,7 @@ df_carb = df_carb.dropna(subset=['Département'])
 
 #affiche les colonnes apres le nettoyage
 print("Colonnes après nettoyage : ", df_carb.columns)
+
+# Écrire le resultat dans un autre csv
+# filepath = Path('../cleaned_Prix_carburants_France_instantane.csv')  
+df_carb.to_csv('../cleaned_Prix_carburants_France_instantane.csv', sep = ';', index=False)
