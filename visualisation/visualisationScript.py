@@ -3,24 +3,26 @@ from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import numpy as np
 
-csv = pd.read_csv('../cleaned_Prix_carburants_France_instantane.csv', delimiter=';', on_bad_lines='skip')
+csv = pd.read_csv('../cleaned_Prix_carburants_France_instantane.csv', delimiter=';', on_bad_lines='skip', dtype = {'longitude': float, 'latitude': float})
 
-print(csv['geom'])
+X_geom = []
+y_geom = []
 
-X = csv['longitude']
-y = csv['latitude']
+for row in csv['geom']:
+    coordonnees = row.split(", ")
 
-m = Basemap(llcrnrlon=-35.,llcrnrlat=-30,urcrnrlon=80.,urcrnrlat=50.,\
-            resolution='l',area_thresh=1000.,projection='poly',\
-            lat_0=0.,lon_0=20.)
+    X_geom.append(float(coordonnees[1]))
+    y_geom.append(float(coordonnees[0]))
 
-x, Y = m(0, 0)
+m = Basemap(projection='merc', resolution='l', llcrnrlat=41.0, urcrnrlat=51.0,
+            llcrnrlon=-5.0, urcrnrlon=10.0)
 
-m.scatter(X, y, marker='D',color='m')
-m.scatter(x, Y, marker='.', color='g')
+X, y = m(X_geom, y_geom)
+
+m.scatter(X, y, marker='D',color='m', zorder=5)
 
 m.fillcontinents(color='coral',lake_color='aqua')
-m.drawmapboundary(fill_color='aqua') 
+m.drawmapboundary(fill_color='aqua')
 
 plt.title("Polyconic Projection")
 plt.show()
